@@ -7,8 +7,8 @@
 
         public LocalMailService(IConfiguration configuration)
         {
-            _mailTo = "mailSetting:mailToAddress";
-            _mailFrom = "mailSetting:mailFromAddress";
+            _mailTo = configuration["mailSettings:mailToAddress"];
+            _mailFrom = configuration["mailSettings:mailFromAddress"];
         }
         public void Send(string subject, string message)
         {

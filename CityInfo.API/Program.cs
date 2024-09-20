@@ -1,6 +1,10 @@
 
 using CityInfo.API;
+using CityInfo.API.DbContexts;
 using CityInfo.API.Models.Services;
+using CityInfo.API.Profiles;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 using System.Reflection;
 
@@ -15,7 +19,7 @@ var builder = WebApplication.CreateBuilder(args);
 //builder.Logging.ClearProviders();
 //builder.Logging.AddConsole();
 
- builder.Host.UseSerilog();
+builder.Host.UseSerilog();
 // Add services to the container.
 
 builder.Services.AddControllers(options =>
@@ -37,9 +41,14 @@ builder.Services.AddTransient<IMailService, LocalMailService>();
 builder.Services.AddTransient<IMailService, CloudMailService>();
 #endif
 
-builder.Services.AddSingleton<CitiesDataStore> ();
+builder.Services.AddSingleton<CitiesDataStore>();
+builder.Services.AddDbContext<CityInfoContext>(
+    dbContextOptions => dbContextOptions.UseSqlite(
+        builder.Configuration["ConnectionStrings:CityInfoDBConnectionString"]));
 
-
+builder.Services.AddScoped<ICityInfoRepository, CityInfoRepository>();
+builder.Services.AddAutoMapper(typeof(CityProfile), typeof(PointOfInterestProfile));
+//builder.Services.AddAutoMapper(new[] { typeof(CityProfile).Assembly });
 
 var app = builder.Build();
 
