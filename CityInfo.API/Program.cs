@@ -1,4 +1,5 @@
 
+using AutoMapper;
 using CityInfo.API;
 using CityInfo.API.DbContexts;
 using CityInfo.API.Models.Services;
@@ -47,6 +48,7 @@ builder.Services.AddDbContext<CityInfoContext>(
         builder.Configuration["ConnectionStrings:CityInfoDBConnectionString"]));
 
 builder.Services.AddScoped<ICityInfoRepository, CityInfoRepository>();
+
 builder.Services.AddAutoMapper(typeof(CityProfile), typeof(PointOfInterestProfile));
 //builder.Services.AddAutoMapper(new[] { typeof(CityProfile).Assembly });
 
